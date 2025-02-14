@@ -36,8 +36,12 @@ class OrderController extends Controller
     public function store(StoreOrderRequest $request)
     {
         auth()->user()->orders()->create($request->all());
-        session()->flash('message', 'Заявка успешно создана');
-        return redirect()->route('orders.index');
+       
+        return response()->json([
+            'success' => true,
+            'message' => 'Заявка успешно создана!',
+        ]);
+
     }
 
     /**

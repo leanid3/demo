@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Admin;
 use App\Http\Requests\StoreAdminRequest;
 use App\Models\Order;
-use Illuminate\Console\View\Components\Alert;
 use Illuminate\Http\Request;
 
-class AdminController extends Controller
+class AdminOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -57,21 +55,20 @@ class AdminController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        if ($order->status === 'new') {
-
         $request->validate([
             'status' => 'required|string|in:new,confirmed,rejected'
         ]);
 
+        if ($order->status === 'new') {
         $order->status = $request->status;
         $order->save();
-        session()->flash('message', 'Данные успешно сохранены!');
-        return response()->json(['success' => true]);
-//            $order->update(['status' => $request->status]);
-//            notify()->success('Статус заявки изменен');
+        return response()->json(['success' => true, 'message' => 'Данные успешно сохранены!']);
         }
-        session()->flash('error', 'Статус можно изменить только для заявлений со статусом "new"');
-        return redirect()->back();
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Статус можно изменить только для заявлений со статусом "new"'
+        ], 422);
     }
 
     /**

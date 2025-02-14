@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\AdminCarController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\AdminMiddleware;
@@ -24,8 +25,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(AdminMiddleware::class)->group(function () {
-    Route::get('/admin/orders', [AdminController::class, 'index'])->name('admin.orders.index');
-    Route::patch('/admin/orders/{order}', [AdminController::class, 'update'])
-        ->name('orders.update');
+    Route::get('/admin/orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
+    Route::patch('/admin/orders/{order}', [AdminOrderController::class, 'update'])->name('orders.update');
+    Route::resource('admin/product', AdminCarController::class);
 });
 require __DIR__.'/auth.php';
